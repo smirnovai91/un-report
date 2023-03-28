@@ -1,3 +1,4 @@
 We plotted life expectancy over time.
 Each line represents a country.
 Continents are grouped by color.
+How about some animations?
