@@ -1,0 +1,139 @@
+---
+title: "Writing Reports with R Markdown"
+author: "Inna Smirnova"
+date: "2023-03-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 1000000)
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars, include=FALSE}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r packages, include=FALSE}
+library(tidyverse)
+```
+
+
+This report is created for UN. Testing associations between GDP and CO2 emissions.
+
+
+```{r loading data}
+#setwd("C:/Users/innas/Desktop/un-report")
+gapminder_1997 <- read_csv("Desktop/un-report/data/gapminder_1997.csv")
+
+```
+
+```{r gdp_lifeexp_1997, echo=FALSE}
+ggplot(data = gapminder_1997) +
+  aes(x=gdpPercap, y=lifeExp, color=continent, size=pop/1000000) +
+  geom_point() +
+  labs(x="GDP per capita",
+       y="Life expectancy",
+       title="Do people in wealthy countries live longer?",
+       size="Population in millions")
+
+```
+```{r}
+nCountries <- gapminder_1997 %>% 
+  select(country) %>% 
+  n_distinct()
+
+minGDP <- gapminder_1997 %>% 
+  summarise(round(min(gdpPercap))) %>% 
+  pull() # extracts column
+
+maxGDP <- gapminder_1997 %>% 
+  summarise(round(max(gdpPercap))) %>% 
+  pull() # extracts column
+
+```
+
+The above plot shows the relationship between GDP per capita and life expectancy for a total of `r nCountries` countries. For this set, economic wealth ranged from a minimum of `r minGDP` USD to a maximum of
+`r maxGDP` USD per capita.
+
+
+|Summary of Data|
+|--------|--------|
+|Number of countries|`r nCountries`|
+|Minimum GDP per capita|`r minGDP`|
+|Maximum GDP per capita|`r maxGDP`|
+
+```{r kabletable}
+library(knitr)
+
+gapminder_1997 %>% 
+  filter(continent=="Oceania") %>% 
+  kable()
+
+```
+# Header 1
+## Header 2
+### My third header
+
+Exercise: R Markdown Syntax
+* create a bullet point list with 3 items
+* 1st item=name of your fav programming language in bold
+* 2nd item=most useful function in italics
+* 3rd item=learning goal in bold italics
+* turn your bullet point list into a numbered list
+* create a 4th list item=markdown help list name and hyperlink
+
+
+* My bullet point list "My programming journey"
+    + My favorite programming language is **Python** 
+    + Most useful Python function I learnt was *pickle*
+    + My learning goal is to **_practice more and more Python:)_**
+    
+My list:
+
+* **R**
+* _mutate()_
+* ***regression analysis in Python***
+
+
+```{toggle my comments, include=FALSE}
+
+*word* OR _word_ creates "italics" font
+**word** creates bold font
+
+\newline creates blank line in the output doc
+
+```
+\newline
+
+* My numbered list "My programming journey"
+    #. My favorite programming language is **Python** 
+    #. Most useful Python function I learnt was *pickle*
+    #. My learning goal is to **_practice more and more Python:)_**
+    #. Markdown helplist **"Markdown Basics"** is available at https://rmarkdown.rstudio.com/authoring_basics.html
+
+My list:
+
+1. **R** # this creates correct numbers automatically
+1. _mutate()_
+1. ***regression analysis in Python***
+4. [https://www.markdownguide.org/cheat-sheet/](Great Markdown Guide)
+
+
