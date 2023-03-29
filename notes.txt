@@ -3,3 +3,5 @@ Each line represents a country.
 Continents are grouped by color.
 How about some animations?
 --Maybe later.
+
+trial team message
